@@ -1,9 +1,9 @@
 // Original code: https://github.com/dvoros/3d
 
 // table width
-tw=150;
+tw=160;
 // table height
-th=5;
+th=6;
 // wall height
 wh=15;
 // slack
@@ -11,13 +11,14 @@ s=0.1;
 
 
 // number of ditches
-dn=8;
+dn=6;
 // ratio of ditch width to board width
 dr=0.15;
 
 // epsilon
 e = 0.01;
 
+smoothing=1;
 
 // DITCHES
 
@@ -25,7 +26,7 @@ e = 0.01;
 dw=tw*dr/dn;
 echo("ditch width", dw);
 // height
-dh=th/2;
+dh=th-1;
 // distance
 fw=tw+dw;
 dd=fw/(dn+1);
@@ -43,9 +44,9 @@ cw=dd-dw;
 pw=0.8*cw;
 
 //mini_board();
-//board();
+board();
 //pawn();
-wall();
+//wall();
 
 module pawn() {
     $fn=40;
@@ -82,16 +83,19 @@ module board() {
 }
 
 module blank_board() {
-    cube(size=[tw, tw, th], center=true);
+    minkowski(){
+        cube(size=[tw-2*smoothing, tw-2*smoothing, th-2*smoothing], center=true);
+        sphere(smoothing);
+    }
 }
 
 module ditches() {
     sx = -tw/2 -dw/2;
     for (d = [1 : dn]) {
         translate([0, sx + d*dd, dh/2 + e])
-        cube(size=[tw+1, dw, th/2], center=true);
+        cube(size=[tw+1, dw, th], center=true);
         
         translate([sx + d*dd, 0, dh/2 + e])
-        cube(size=[dw, tw+1, th/2], center=true);
+        cube(size=[dw, tw+1, th], center=true);
     }
 }
