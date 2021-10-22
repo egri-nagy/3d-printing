@@ -5,7 +5,7 @@ tw=160;
 // table height
 th=6;
 // wall height
-wh=15;
+wh=20;
 // slack
 s=0.1;
 
@@ -34,7 +34,7 @@ dd=fw/(dn+1);
 // WALLS
 
 // width
-ww=dw-2*s;
+ww=dw-s;
 echo("wall width", ww);
 wl=2*dd-dw;
 
@@ -44,15 +44,15 @@ cw=dd-dw;
 pw=0.8*cw;
 
 //mini_board();
-board();
+//board();
 //pawn();
-//wall();
+wall();
 
 module pawn() {
-    $fn=40;
+    $fn=60;
     translate([0, 0, th/2])
     union() {
-        linear_extrude(scale=0.2, height=wh)
+        linear_extrude(scale=0.4, height=wh)
         circle(d=pw);
         
         translate([0, 0, wh])
@@ -61,8 +61,11 @@ module pawn() {
 }
 
 module wall() {
+    minkowski(){
     rotate([0, -90, 0])
-    cube(size=[ww, wl, wh]);
+    cube(size=[ww-2*smoothing, wl-smoothing, wh-2*smoothing]);
+    sphere(smoothing);
+    }
 }
 
 module mini_board() {
