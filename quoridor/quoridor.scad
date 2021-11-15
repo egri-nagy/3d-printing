@@ -1,11 +1,11 @@
 // Original code: https://github.com/dvoros/3d
 
 // table width
-tw=160;
+tw=200;
 // table height
 th=6;
 // wall height
-wh=20;
+wh=24;
 // slack
 s=0.1;
 
@@ -45,15 +45,18 @@ pw=0.8*cw;
 
 //mini_board();
 //board();
-//pawn();
-wall();
+pawn();
+//wall();
 
 module pawn() {
     $fn=60;
     translate([0, 0, th/2])
     union() {
-        linear_extrude(scale=0.4, height=wh)
+        minkowski(){
+            linear_extrude(scale=0.4, height=wh)
         circle(d=pw);
+            sphere(smoothing);
+        }
         
         translate([0, 0, wh])
         sphere(d=0.8*pw);
@@ -63,7 +66,7 @@ module pawn() {
 module wall() {
     minkowski(){
     rotate([0, -90, 0])
-    cube(size=[ww-2*smoothing, wl-smoothing, wh-2*smoothing]);
+    cube(size=[ww-2*smoothing, wl-2*smoothing, wh-2*smoothing]);
     sphere(smoothing);
     }
 }
